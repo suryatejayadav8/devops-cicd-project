@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+
+metadata:
+
+  name: devops-cicd-project
+
+  labels:
+
+    app: devops-cicd-project
+
+
+spec:
+
+  replicas: 3
+
+
+  selector:
+
+    matchLabels:
+
+      app: devops-cicd-project
+
+
+  template:
+
+    metadata:
+
+      labels:
+
+        app: devops-cicd-project
+
+
+    spec:
+
+      containers:
+
+        - name: devops-cicd-project
+
+          image: YOUR_DOCKERHUB_USERNAME/devops-cicd-project:latest
+
+          imagePullPolicy: Always
+
+
+          ports:
+
+            - containerPort: 8080
+
+
+          readinessProbe:
+
+            httpGet:
+
+              path: /health
+
+              port: 8080
+
+            initialDelaySeconds: 10
+
+            periodSeconds: 5
+
+
+          livenessProbe:
+
+            httpGet:
+
+              path: /health
+
+              port: 8080
+
+            initialDelaySeconds: 20
+
+            periodSeconds: 10
+
+
+          resources:
+
+            requests:
+
+              memory: "128Mi"
+
+              cpu: "100m"
+
+
+            limits:
+
+              memory: "512Mi"
+
+              cpu: "500m"
